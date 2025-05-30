@@ -13,6 +13,8 @@ import RegisterOtpNumberScreen from './Screens/SignUp/NumberOtpscreen/Index';
 import SaloonInfoScreen from './Screens/SignUp/SaloonInfoScreen/Index';
 import SaloonServicesScreen from './Screens/SignUp/SaloonServicesScreen/Index';
 import Navigation from './Screens/Navigation/Navigation';
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
 
 const Stack = createNativeStackNavigator();
 SplashScreen.preventAutoHideAsync();
@@ -35,9 +37,9 @@ export default function App() {
   if (!fontsLoaded) return null;
 
   return (
-    <>
+    <Provider store={store}>
     <StatusBar 
-      barStyle="light-content" // This makes the text white
+      barStyle="dark-content" // This makes the text white
       backgroundColor="transparent"
       translucent={true}
     />
@@ -61,6 +63,6 @@ export default function App() {
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>
-    </>
+    </Provider>
   );
 }

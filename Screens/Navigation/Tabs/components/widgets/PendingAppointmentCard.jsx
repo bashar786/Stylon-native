@@ -43,10 +43,10 @@ const AppointmentCard = ({
 
       <View style={styles.buttonsContainer}>
         <TouchableOpacity style={styles.completeButton} onPress={onComplete}>
-          <Text style={styles.completeText}>COMPLETE</Text>
+          <Text style={styles.completeText}>APPROVE</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.cancelButton} onPress={onCancel}>
-          <Text style={styles.cancelText}>CANCEL</Text>
+          <Text style={styles.cancelText}>REJECT</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -59,13 +59,12 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#fff',
     borderRadius: 12,
-    padding: 16,
-    margin: 16,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    width: '100%'
+    borderWidth: 1,
+    borderColor: '#D8D8D8',
+    width: '100%',
+    marginBottom: 20,
+    paddingVertical: 32,
+    paddingHorizontal: 20,
   },
   header: {
     flexDirection: 'row',
@@ -75,6 +74,7 @@ const styles = StyleSheet.create({
   userName: {
     fontWeight: 'bold',
     fontSize: 18,
+    fontFamily: 'Bold',
   },
   servicesContainer: {
     marginTop: 12,
@@ -84,34 +84,43 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
     marginBottom: 12,
+    fontFamily: 'Regular',
   },
   serviceText: {
     flex: 1,
     fontSize: 16,
+    fontFamily: 'Regular',
   },
   timeText: {
     color: 'gray',
     fontSize: 14,
+    fontFamily: 'Regular',
   },
   infoRow: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 12,
     gap: 8,
+    
+    
   },
   infoText: {
     fontSize: 16,
+    fontFamily: 'Regular',
   },
   buttonsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: '#D8D8D8',
+    paddingTop: 32,
   },
   completeButton: {
     borderWidth: 1,
     borderColor: 'green',
     borderRadius: 30,
-    paddingVertical: 8,
+    paddingVertical: 12,
     paddingHorizontal: 24,
     width: '48%',
     textAlign: 'center',
@@ -122,20 +131,20 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'red',
     borderRadius: 30,
-    paddingVertical: 8,
+    paddingVertical: 12,
     paddingHorizontal: 24,
     width: '48%',
     textAlign: 'center'
   },
   completeText: {
     color: '#00C52E',
-    fontWeight: 'bold',
+    fontFamily: 'SemiBold',
     textAlign: 'center',
     fontSize: 16,
   },
   cancelText: {
     color: '#FF240E',
-    fontWeight: 'bold',
+    fontFamily: 'SemiBold',
     textAlign: 'center',
     fontSize: 16,
   },

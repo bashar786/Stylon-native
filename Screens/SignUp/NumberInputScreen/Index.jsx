@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   TextInput,
@@ -16,19 +16,32 @@ import { useNavigation } from '@react-navigation/native';
 import Check from '../../../assets/images/check1.svg';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Checkbox from 'expo-checkbox';
-
-
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  selectPhoneNumber,
+  selectTermsAccepted,
+} from '../../../redux/reducer/ReducerExport';
+import {  setPhoneNumber,acceptTerms,} from '../../../redux/reducer/SaloonReducer'
 
 const Index = () => {
   const navigation = useNavigation();
   const [isChecked, setChecked] = useState(false);
   const [phone, setPhone] = useState('');
-
+  const dispatch = useDispatch();
+  const phoneNumber = useSelector(selectPhoneNumber);
+  const registration = useSelector((state) => state.salon.registration);
+  useEffect(() => {
+    console.log('Registration state updated:', registration);
+  }, [registration]);
+  
   const handleLogin = () => {
-    if (phone.trim().length > 0 && isChecked) {
-      navigation.navigate('RegisterOtpNumberScreen');
-    }
-  };
+  if (phone.trim().length > 0 && isChecked) {
+    dispatch(setPhoneNumber(phone));
+    dispatch(acceptTerms(isChecked))
+    console.log('dispatched setPhoneNumber:', phoneNumber);
+    navigation.navigate('RegisterOtpNumberScreen');
+  }
+};
   
 
   return (

@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#00C52E',
     fontWeight: 'bold',
-    fontSize: 'Medium'
+    fontSize: 14
   },
   disabledButton: {
     opacity: 0.6

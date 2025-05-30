@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, ScrollView, FlatList } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native';
 import Upcoming from './components/UpcomingAppointments';
 import Pending from './components/PendingAppointments';
 import History from './components/AppointmentsHistory';
-import CalenderImage from '../../../assets/images/calendaradd.svg'
+import CalenderImage from '../../../assets/images/calendaradd.svg';
 
-// Custom colors
 const Colors = {
-  primary: '#FE4E00',       // Primary blue
+  primary: '#FE4E00',
+  secondary: '#F5F5F5',
 };
 
 const ActivityScreen = () => {
@@ -26,49 +26,44 @@ const ActivityScreen = () => {
     }
   };
 
-  const isVirtualizedList = (component) => {
-    return component?.type === FlatList || component?.type?.displayName === 'FlatList';
-  };
-
-  const selectedComponent = renderComponent();
-
   return (
-    <View style={{flex: 1, backgroundColor: Colors.secondary}}>
-      <View style={styles.container}>
-      <View style={{justifyContent: 'center', alignItems: 'center', marginBottom: 10}}>
-    <CalenderImage />
-      </View>
-        
-        <View style={styles.tabContainer}>
-          {['Upcoming', 'Pending', 'History'].map((tab) => (
-            <TouchableOpacity
-              key={tab}
-              style={[
-                styles.tab,
-                selectedTab === tab ? styles.selectedTab : styles.unselectedTab,
-              ]}
-              onPress={() => setSelectedTab(tab)}
-            >
-              <Text style={[
-                styles.tabText,
-                selectedTab === tab ? styles.selectedTabText : styles.unselectedTabText
-              ]}>
-                {tab}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+    <View style={{ flex: 1, backgroundColor: '#fff', width: '100%' }}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContainer}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.container}>
+          <View style={styles.calendarWrapper}>
+            <CalenderImage />
+          </View>
 
-        <View style={styles.componentContainer}>
-          {isVirtualizedList(selectedComponent) ? (
-            selectedComponent
-          ) : (
-            <ScrollView showsVerticalScrollIndicator={false}>
-              {selectedComponent}
-            </ScrollView>
-          )}
+          <View style={styles.tabContainer}>
+            {['Upcoming', 'Pending', 'History'].map((tab) => (
+              <TouchableOpacity
+                key={tab}
+                style={[
+                  styles.tab,
+                  selectedTab === tab ? styles.selectedTab : styles.unselectedTab,
+                ]}
+                onPress={() => setSelectedTab(tab)}
+              >
+                <Text
+                  style={[
+                    styles.tabText,
+                    selectedTab === tab ? styles.selectedTabText : styles.unselectedTabText,
+                  ]}
+                >
+                  {tab}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          <View style={styles.componentContainer}>
+            {renderComponent()}
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };
@@ -76,19 +71,20 @@ const ActivityScreen = () => {
 export default ActivityScreen;
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    flexGrow: 1,
+  },
   container: {
-    flex: 1,
     paddingHorizontal: 20,
     backgroundColor: '#fff',
-    width: '100%',
     paddingVertical: 26,
     fontFamily: 'Medium',
+    width: '100%',
   },
-  screenTitle: {
-    color: Colors.textDark,
-    fontSize: 24,
-    fontWeight: '600',
-    marginBottom: 5,
+  calendarWrapper: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
   },
   tabContainer: {
     flexDirection: 'row',
@@ -98,7 +94,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderWidth: 1,
     borderColor: '#D8D8D8',
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   tab: {
     flex: 1,
@@ -126,9 +122,9 @@ const styles = StyleSheet.create({
     fontFamily: 'SemiBold',
   },
   componentContainer: {
-    flex: 1,
     marginTop: 20,
     backgroundColor: '#fff',
     borderRadius: 10,
+    width: '100%',
   },
 });

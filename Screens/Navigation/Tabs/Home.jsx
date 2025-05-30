@@ -4,7 +4,7 @@ import SaloonImg from '../../../assets/images/saloonimg.png'
 import Create from '../../../assets/images/create.svg'
 import Calendar from '../../../assets/images/calendaradd.svg'
 import Share from '../../../assets/images/share.svg'
-import UpcomingAppoitment from './components/UpcomingCard.jsx';
+import UpcomingAppoitment from './components/UpcomingCardHome.jsx';
 import AppointmentRequests from './components/AppointmentRequests.jsx';
 
 const Home = () => {

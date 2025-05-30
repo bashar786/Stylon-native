@@ -101,7 +101,7 @@ const accountRef = useRef();
     setValue={setValue}
     setItems={setItems}
     dropDownDirection="BOTTOM"
-    style={{borderWidth: 0, color: '#222'}}
+    style={{borderWidth: 0, color: '#222', fontFamily: 'Medium', paddingHorizontal: 20,}}
     containerStyle={{ marginBottom: open ? 180 : 8 }}
     placeholder="Select a category"
   />
