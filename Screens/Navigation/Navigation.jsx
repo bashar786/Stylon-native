@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, StatusBar } from 'react-native';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
@@ -11,6 +11,8 @@ import Profile from './Tabs/Profile';
 import Logo from '../../assets/images/logo.svg'
 import Notification from '../../assets/images/notification.svg'
 import Filter from '../../assets/images/filters.svg'
+import SpecialistOrange from '../../assets/images/SpecialistOrange.svg'
+import SpecialistIcon from '../../assets/images/SpecialistIcon.svg'
 import Menu from '../../assets/images/menu.svg'
 import HomeIcon from '../../assets/images/home.svg'
 import HomeOrange from '../../assets/images/orangehome.svg'
@@ -20,13 +22,16 @@ import StatsIcon from '../../assets/images/stats.svg'
 import StatsOrange from '../../assets/images/orangestats.svg'
 import ProfileIcon from '../../assets/images/profileicon.svg'
 import ProfileOrange from '../../assets/images/orangeprofile.svg'
+import Specialists from './Tabs/Specialists/Specialists';
 
 // Dummy Screens (replace with real ones)
 const HomeScreen = () => <View style={styles.screen}><Home /></View>;
 const CalendarScreen = () => <View style={styles.screen}><Calender /></View>;
 const ShareScreen = () => <View style={styles.screen}><Stats /></View>;
+const SpecialistsScreen = () => <View style={styles.screen}><Specialists /></View>;
 const ProfileScreen = () => <View style={styles.screen}><Profile /></View>;
 const TransactionsScreen = () => <View style={styles.screen}><Text>Transactions</Text></View>;
+// 定义一个名为CustomersScreen的函数组件
 const CustomersScreen = () => <View style={styles.screen}><Text>Customers</Text></View>;
 const FollowersScreen = () => <View style={styles.screen}><Text>Followers</Text></View>;
 const ReviewsScreen = () => <View style={styles.screen}><Text>Reviews</Text></View>;
@@ -107,7 +112,17 @@ function BottomTabs({ navigation }) {
         component={CalendarScreen}
         options={{
           tabBarIcon: ({ focused }) => (
-            focused ? <CalenderOrange width={24} height={24} /> : <CalenderIcon width={24} height={24} />
+            focused ? < CalenderOrange width={24} height={24} /> : <CalenderIcon width={24} height={24} />
+          ),
+        }}
+      />
+      
+      <Tab.Screen
+        name="Specialists"
+        component={Specialists}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            focused ? <SpecialistOrange width={24} height={24} /> : <SpecialistIcon width={24} height={24} />
           ),
         }}
       />
@@ -143,34 +158,10 @@ function CustomDrawerContent(props) {
       <View style={{ padding: 20 }}>
       </View>
       <DrawerItem
-        label="Transactions"
-        labelStyle={styles.drawerLabel}
-        icon={() => <MaterialIcons name="account-balance-wallet" size={22} color="#fff" />}
-        onPress={() => props.navigation.navigate('Transactions')}
-      />
-      <DrawerItem
         label="Customers"
         labelStyle={styles.drawerLabel}
         icon={() => <Ionicons name="people-outline" size={22} color="#fff" />}
         onPress={() => props.navigation.navigate('Customers')}
-      />
-      <DrawerItem
-        label="Followers"
-        labelStyle={styles.drawerLabel}
-        icon={() => <Ionicons name="heart-outline" size={22} color="#fff" />}
-        onPress={() => props.navigation.navigate('Followers')}
-      />
-      <DrawerItem
-        label="Reviews"
-        labelStyle={styles.drawerLabel}
-        icon={() => <Ionicons name="star-outline" size={22} color="#fff" />}
-        onPress={() => props.navigation.navigate('Reviews')}
-      />
-      <DrawerItem
-        label="Views"
-        labelStyle={styles.drawerLabel}
-        icon={() => <Ionicons name="eye-outline" size={22} color="#fff" />}
-        onPress={() => props.navigation.navigate('Views')}
       />
       <DrawerItem
         label="Settings"
@@ -191,10 +182,13 @@ function CustomDrawerContent(props) {
 // Drawer Navigator
 export default function MainAppNavigator() {
   return (
+    <>    
+    <StatusBar barStyle="light-content" />
     <Drawer.Navigator
       drawerContent={(props) => <CustomDrawerContent {...props} />}
       screenOptions={{ headerShown: false }}
     >
+     
       <Drawer.Screen name="MainTabs">
   {(props) => <BottomTabs {...props} />}
 </Drawer.Screen>
@@ -206,6 +200,7 @@ export default function MainAppNavigator() {
       <Drawer.Screen name="Settings" component={SettingsScreen} />
       <Drawer.Screen name="Logout" component={LogoutScreen} />
     </Drawer.Navigator>
+    </>
   );
 }
 

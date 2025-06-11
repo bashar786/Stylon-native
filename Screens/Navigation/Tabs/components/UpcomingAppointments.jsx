@@ -1,38 +1,58 @@
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import UpcomingAppointment from './widgets/UpcomingAppointmentCard';
+import UpcomingAppointment from './widgets/Calendar/UpcomingAppointmentCard';
+import { useNavigation } from 'expo-router';
 
 const mockAppointments = [
+  
   {
-    id: '1',
-    userImage: 'https://randomuser.me/api/portraits/men/1.jpg',
-    userName: 'Raza Hassan',
+    id: 101,
+    date: "2025-06-11",
+    time: "10:00 AM",
+    customerName: "John Doe",
+    specialistName: "Dr. Sarah Lee",
+    specialistRole: "Barber",
+    specialistImage: ("https://randomuser.me/api/portraits/men/7.jpg"),
+    orderNumber: "A001",
     services: [
-      { name: 'Hair Styling', duration: '30 min' },
-      { name: 'Hair Color', duration: '1 hour' },
+      { name: "Haircut", time: "30 mins", price: "$20" },
+      { name: "Beard Trim", time: "15 mins", price: "$10" },
     ],
-    appointmentDate: '30-12-2023, 10AM',
-    barberName: 'Raza, Sr Barber'
   },
   {
-    id: '2',
-    userImage: 'https://randomuser.me/api/portraits/women/1.jpg',
-    userName: 'Sarah Khan',
+    id: 102,
+    date: "2025-06-15",
+    time: "2:30 PM",
+    customerName: "Emma Watson",
+    specialistRole: "Owner",
+    specialistName: "Dr. Mike Ross",
+    specialistImage: ("https://randomuser.me/api/portraits/men/9.jpg"),
+    orderNumber: "A002",
     services: [
-      { name: 'Manicure', duration: '45 min' },
-      
+      { name: "Facial", time: "45 mins", price: "$40" },
+      { name: "Massage", time: "1 hr", price: "$60" },
     ],
-    appointmentDate: '31-12-2023, 2PM',
-    barberName: 'Ali, Jr Barber'
   },
-  // Add more mock appointments if needed
+  {
+    id: 103,
+    date: "2025-06-15",
+    time: "4:00 PM",
+    customerName: "Jake Paul",
+    specialistRole: "Manager",
+    specialistName: "Dr. Lisa Ray",
+    specialistImage: ("https://randomuser.me/api/portraits/men/12.jpg"),
+    orderNumber: "A003",
+    services: [
+      { name: "Manicure", time: "25 mins", price: "$15" },
+    ],
+  },
 ];
 
 const UpcomingAppointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const navigation = useNavigation();
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
@@ -78,16 +98,24 @@ const UpcomingAppointments = () => {
     <View style={styles.container}>
       {appointments.length > 0 ? (
         appointments.map((item) => (
+          <TouchableOpacity
+          key={item.id}
+          onPress={() =>
+            navigation.navigate("AppointmentHistoryDetail", { appointment: item })
+          }
+          activeOpacity={0.8}
+        >
           <UpcomingAppointment
             key={item.id}
-            userImage={item.userImage}
-            userName={item.userName}
+            userImage={item.specialistImage}
+            userName={item.customerName}
             services={item.services}
-            appointmentDate={item.appointmentDate}
-            barberName={item.barberName}
+            appointmentDate={[ item.date,' ',' ', item.time]}
+            barberName={item.specialistName}
             onComplete={() => handleComplete(item.id)}
             onCancel={() => handleCancel(item.id)}
           />
+          </TouchableOpacity>
         ))
       ) : (
         <Text style={styles.emptyText}>No upcoming appointments</Text>

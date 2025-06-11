@@ -15,6 +15,15 @@ import SaloonServicesScreen from './Screens/SignUp/SaloonServicesScreen/Index';
 import Navigation from './Screens/Navigation/Navigation';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
+import CreateAppointment from './Screens/Navigation/Tabs/components/CreateAppoitment/CreateAnAppointment'
+import CreateAnAppointment from './Screens/Navigation/Tabs/components/CreateAppoitment/CreateAnAppointment';
+import SelectCustomer from './Screens/Navigation/Tabs/components/CreateAppoitment/SelectCustomer/SelectCustomer';
+import ConfirmBookingScreen from './Screens/Navigation/Tabs/components/CreateAppoitment/ConfirmBooking/ConfirmBooking';
+import SuccessfullyBookedScreen from './Screens/Navigation/Tabs/components/CreateAppoitment/ConfirmBooking/SuccessfullyBooked';
+import AppointmentHistory from './Screens/Navigation/Tabs/components/AppointmentHistory/AppointmentHistory';
+import AppointmentHistoryDetail from './Screens/Navigation/Tabs/components/AppointmentHistory/AppointmentHistoryDetail';
+
+
 
 const Stack = createNativeStackNavigator();
 SplashScreen.preventAutoHideAsync();
@@ -46,7 +55,7 @@ export default function App() {
     <PaperProvider>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="MainApp"
+          initialRouteName="LoginNumberInputScreen"
          screenOptions={{
           headerShown: false, 
         }}
@@ -59,7 +68,14 @@ export default function App() {
           <Stack.Screen name="SaloonInfoScreen" component={SaloonInfoScreen} />
           <Stack.Screen name="SaloonServicesScreen" component={SaloonServicesScreen} />
           <Stack.Screen name="MainApp" component={Navigation} options={{ headerShown: false }} />
+          <Stack.Screen name="CreateAnAppointment" component={CreateAnAppointment} />
+          <Stack.Screen name="SelectCustomerScreen" component={SelectCustomer} />
+          <Stack.Screen name="ConfirmBooking" component={ConfirmBookingScreen} />
+          <Stack.Screen name="SuccessfullyBookedScreen" component={SuccessfullyBookedScreen} />
+          <Stack.Screen name="AppointmentHistory" component={AppointmentHistory} />
+          <Stack.Screen name="AppointmentHistoryDetail" component={AppointmentHistoryDetail} />
 
+          
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>

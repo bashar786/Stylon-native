@@ -1,9 +1,57 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { FontAwesome, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import ClockIcon from '../../../../assets/images/clock.svg'
 import UserIcon from '../../../../assets/images/user.svg'
 import TimeIcon from '../../../../assets/images/time.svg'
+import { useNavigation } from 'expo-router';
+
+const mockAppointments = [
+  
+  {
+    id: 101,
+    date: "2025-06-11",
+    time: "10:00 AM",
+    customerName: "John Doe",
+    specialistName: "Dr. Sarah Lee",
+    specialistRole: "Barber",
+    specialistImage: ("https://randomuser.me/api/portraits/women/2.jpg"),
+    orderNumber: "A001",
+    services: [
+      { name: "Haircut", time: "30 mins", price: "$20" },
+      { name: "Beard Trim", time: "15 mins", price: "$10" },
+    ],
+  },
+  {
+    id: 102,
+    date: "2025-06-15",
+    time: "2:30 PM",
+    customerName: "Emma Watson",
+    specialistRole: "Owner",
+    specialistName: "Dr. Mike Ross",
+    specialistImage: ("https://randomuser.me/api/portraits/women/5.jpg"),
+    orderNumber: "A002",
+    services: [
+      { name: "Facial", time: "45 mins", price: "$40" },
+      { name: "Massage", time: "1 hr", price: "$60" },
+    ],
+  },
+  {
+    id: 103,
+    date: "2025-06-15",
+    time: "4:00 PM",
+    customerName: "Jake Paul",
+    specialistRole: "Manager",
+    specialistName: "Dr. Lisa Ray",
+    specialistImage: ("https://randomuser.me/api/portraits/men/5.jpg"),
+    orderNumber: "A003",
+    services: [
+      { name: "Manicure", time: "25 mins", price: "$15" },
+    ],
+  },
+];
+
+
 
 const AppointmentCard = ({ name, time, barber, duration }) => {
   const [status, setStatus] = useState('Pending');
@@ -54,6 +102,25 @@ const AppointmentCard = ({ name, time, barber, duration }) => {
 };
 
 export default function App() {
+  const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigation = useNavigation();
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        // Simulating fetch
+        setAppointments(mockAppointments);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchAppointments();
+  }, []);
+  
     return (
       <ScrollView contentContainerStyle={styles.container}>
          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -67,30 +134,26 @@ export default function App() {
   
         {/* Horizontal ScrollView for multiple appointment cards */}
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.cardContainer}>
-          <AppointmentCard
-            name="Mudassir Ali"
-            time="Today, 10:00 AM"
-            barber="Hamza, Sr Barber"
-            duration="1:30 Hour"
+        {appointments.length > 0 ? (
+        appointments.map((item) => (
+          <TouchableOpacity
+          key={item.id}
+          onPress={() =>
+            navigation.navigate("AppointmentHistoryDetail", { appointment: item })
+          }
+          activeOpacity={0.8}
+        >
+            <AppointmentCard
+            name={item.customerName}
+            time={[ item.date, ' ',  item.time,]}
+            barber={item.specialistName}
+            duration={item.time}
           />
-          <AppointmentCard
-            name="Ali Hamza"
-            time="Today, 10:00 AM"
-            barber="Raza, Sr Barber"
-            duration="1:30 Hour"
-          />
-          <AppointmentCard
-            name="Bilal Zafar"
-            time="Today, 11:30 AM"
-            barber="Asim, Jr Barber"
-            duration="1 Hour"
-          />
-          <AppointmentCard
-            name="Usman Tariq"
-            time="Today, 1:00 PM"
-            barber="Noman, Sr Barber"
-            duration="1:15 Hour"
-          />
+             </TouchableOpacity>
+        ))
+      ) : (
+        <Text style={styles.emptyText}>No upcoming appointments</Text>
+      )}
           {/* Add more AppointmentCard components here */}
         </ScrollView>
       </ScrollView>

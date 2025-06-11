@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native';
 import Upcoming from './components/UpcomingAppointments';
 import Pending from './components/PendingAppointments';
-import History from './components/AppointmentsHistory';
+import History from './components/AppointmentHistory';
 import CalenderImage from '../../../assets/images/calendaradd.svg';
+import { useNavigation } from 'expo-router';
 
 const Colors = {
   primary: '#FE4E00',
@@ -12,7 +13,7 @@ const Colors = {
 
 const ActivityScreen = () => {
   const [selectedTab, setSelectedTab] = useState('Upcoming');
-
+  const navigation = useNavigation(); 
   const renderComponent = () => {
     switch (selectedTab) {
       case 'Upcoming':
@@ -34,7 +35,8 @@ const ActivityScreen = () => {
       >
         <View style={styles.container}>
           <View style={styles.calendarWrapper}>
-            <CalenderImage />
+            <TouchableOpacity onPress={()=> navigation.navigate('AppointmentHistory')}><Text> <CalenderImage /></Text></TouchableOpacity>
+           
           </View>
 
           <View style={styles.tabContainer}>

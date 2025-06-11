@@ -180,6 +180,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 16,
+    fontFamily: 'Bold',
   },
   modalOverlay: {
     flex: 1,
@@ -197,6 +198,7 @@ const styles = StyleSheet.create({
     top: 10,
     right: 10,
     zIndex: 1,
+    fontFamily: 'Bold',
   },
   imagePicker: {
     height: 200,
@@ -221,6 +223,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 16,
+    fontFamily: 'Bold',
   },
   fullscreenModal: {
     flex: 1,

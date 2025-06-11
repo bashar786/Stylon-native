@@ -5,11 +5,12 @@ import Create from '../../../assets/images/create.svg'
 import Calendar from '../../../assets/images/calendaradd.svg'
 import Share from '../../../assets/images/share.svg'
 import UpcomingAppoitment from './components/UpcomingCardHome.jsx';
-import AppointmentRequests from './components/AppointmentRequests.jsx';
+import AppointmentRequests from './components/widgets/AppointmentRequests.jsx';
+import { useNavigation } from 'expo-router'
 
 const Home = () => {
   const SaloonName = 'Rouge Beauty Salon';
-
+  const navigation = useNavigation();
   return (
     <ScrollView style={styles.MainContainer}>
 
@@ -24,10 +25,10 @@ const Home = () => {
     </View>
     </View>
 <View style={styles.flexImages}>
-  <TouchableOpacity>
+  <TouchableOpacity onPress={()=> navigation.navigate('Specialists')}>
 <Create />
 </TouchableOpacity>
-<TouchableOpacity>
+<TouchableOpacity onPress={()=> navigation.navigate('AppointmentHistory')}>
 <Calendar />
 </TouchableOpacity>
 <TouchableOpacity>
