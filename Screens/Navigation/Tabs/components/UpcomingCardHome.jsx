@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { FontAwesome, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
-import ClockIcon from '../../../../assets/images/clock.svg'
-import UserIcon from '../../../../assets/images/user.svg'
-import TimeIcon from '../../../../assets/images/time.svg'
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
+import ClockIcon from '../../../../assets/images/clock.svg';
+import UserIcon from '../../../../assets/images/user.svg';
+import TimeIcon from '../../../../assets/images/time.svg';
 import { useNavigation } from 'expo-router';
 
 const mockAppointments = [
-  
   {
     id: 101,
+    status: 'Pending',
     date: "2025-06-11",
     time: "10:00 AM",
     customerName: "John Doe",
     specialistName: "Dr. Sarah Lee",
     specialistRole: "Barber",
-    specialistImage: ("https://randomuser.me/api/portraits/women/2.jpg"),
+    specialistImage: "https://randomuser.me/api/portraits/women/2.jpg",
     orderNumber: "A001",
     services: [
       { name: "Haircut", time: "30 mins", price: "$20" },
@@ -24,12 +24,13 @@ const mockAppointments = [
   },
   {
     id: 102,
+    status: 'Pending',
     date: "2025-06-15",
     time: "2:30 PM",
     customerName: "Emma Watson",
     specialistRole: "Owner",
     specialistName: "Dr. Mike Ross",
-    specialistImage: ("https://randomuser.me/api/portraits/women/5.jpg"),
+    specialistImage: "https://randomuser.me/api/portraits/women/5.jpg",
     orderNumber: "A002",
     services: [
       { name: "Facial", time: "45 mins", price: "$40" },
@@ -38,12 +39,13 @@ const mockAppointments = [
   },
   {
     id: 103,
+    status: 'Pending',
     date: "2025-06-15",
     time: "4:00 PM",
     customerName: "Jake Paul",
     specialistRole: "Manager",
     specialistName: "Dr. Lisa Ray",
-    specialistImage: ("https://randomuser.me/api/portraits/men/5.jpg"),
+    specialistImage: "https://randomuser.me/api/portraits/men/5.jpg",
     orderNumber: "A003",
     services: [
       { name: "Manicure", time: "25 mins", price: "$15" },
@@ -51,20 +53,26 @@ const mockAppointments = [
   },
 ];
 
-
-
-const AppointmentCard = ({ name, time, barber, duration }) => {
-  const [status, setStatus] = useState('Pending');
-
+const AppointmentCard = ({ id, name, time, barber, duration, status, onComplete }) => {
   const handleStatusChange = () => {
     if (status === 'Pending') {
-      setStatus('Completed');
+      Alert.alert(
+        'Confirm Completion',
+        'Are you sure you want to mark this appointment as completed?',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          {
+            text: 'Yes',
+            onPress: () => onComplete(id),
+          },
+        ],
+        { cancelable: true }
+      );
     }
   };
 
   return (
     <View style={styles.card}>
-      {/* Green completed icon only if status is completed */}
       {status === 'Completed' && (
         <View style={styles.completedIcon}>
           <MaterialIcons name="check-circle" size={24} color="white" />
@@ -74,12 +82,12 @@ const AppointmentCard = ({ name, time, barber, duration }) => {
       <Text style={styles.name}>{name}</Text>
 
       <View style={styles.row}>
-      <ClockIcon />
+        <ClockIcon />
         <Text style={styles.detailText}>{time}</Text>
       </View>
 
       <View style={styles.row}>
-       <UserIcon />
+        <UserIcon />
         <Text style={styles.detailText}>{barber}</Text>
       </View>
 
@@ -103,91 +111,92 @@ const AppointmentCard = ({ name, time, barber, duration }) => {
 
 export default function App() {
   const [appointments, setAppointments] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const navigation = useNavigation();
+
   useEffect(() => {
     const fetchAppointments = async () => {
-      try {
-        // Simulating fetch
-        setAppointments(mockAppointments);
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
-      }
+      setAppointments(mockAppointments); // Simulated fetch
     };
 
     fetchAppointments();
   }, []);
-  
-    return (
-      <ScrollView contentContainerStyle={styles.container}>
-         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-         <Text style={styles.heading}>
-          Upcoming Appointments
-         
-        </Text>
-        <Text style={styles.subheading}>(12 Left)</Text>
-        <Text style={styles.seeAll}>  See all</Text>
-         </View>
-  
-        {/* Horizontal ScrollView for multiple appointment cards */}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.cardContainer}>
-        {appointments.length > 0 ? (
-        appointments.map((item) => (
-          <TouchableOpacity
-          key={item.id}
-          onPress={() =>
-            navigation.navigate("AppointmentHistoryDetail", { appointment: item })
-          }
-          activeOpacity={0.8}
-        >
-            <AppointmentCard
-            name={item.customerName}
-            time={[ item.date, ' ',  item.time,]}
-            barber={item.specialistName}
-            duration={item.time}
-          />
-             </TouchableOpacity>
-        ))
-      ) : (
-        <Text style={styles.emptyText}>No upcoming appointments</Text>
-      )}
-          {/* Add more AppointmentCard components here */}
-        </ScrollView>
-      </ScrollView>
+
+  const markAsCompleted = (id) => {
+    setAppointments((prev) =>
+      prev.map((appt) =>
+        appt.id === id ? { ...appt, status: 'Completed' } : appt
+      )
     );
-  }
-  
+  };
+
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text style={styles.heading}>Upcoming Appointments</Text>
+        <Text style={styles.subheading}>(12 Left)</Text>
+        <Text style={styles.seeAll}>See all</Text>
+      </View>
+
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.cardContainer}>
+        {appointments.filter(item => item.status !== 'Completed').length > 0 ? (
+          appointments
+            .filter(item => item.status !== 'Completed')
+            .map((item) => (
+              <TouchableOpacity
+                key={item.id}
+                onPress={() =>
+                  navigation.navigate("AppointmentHistoryDetail", { appointment: item })
+                }
+                activeOpacity={0.8}
+              >
+                <AppointmentCard
+                  id={item.id}
+                  name={item.customerName}
+                  time={`${item.date} ${item.time}`}
+                  barber={item.specialistName}
+                  duration={item.time}
+                  status={item.status}
+                  onComplete={markAsCompleted}
+                />
+              </TouchableOpacity>
+            ))
+        ) : (
+          <Text style={styles.emptyText}>No upcoming appointments</Text>
+        )}
+      </ScrollView>
+    </ScrollView>
+  );
+}
 
 const styles = StyleSheet.create({
+  container: {
+    padding: 0,
+  },
   heading: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 16,
     fontFamily: "SemiBold",
-    flexDirection : 'row',
-    justifyContent: 'space-between',
   },
   subheading: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 16,
-    fontFamily: "SemiBold",
     color: '#737373',
-    fontSize: 16,
+    marginBottom: 16,
+    marginLeft: -30,
+    fontFamily: "SemiBold",
   },
   seeAll: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: '#FE4E00',
     marginBottom: 16,
     fontFamily: "SemiBold",
-    color: '#FE4E00',
   },
   cardContainer: {
     flexDirection: 'row',
-    gap: 16
+    gap: 16,
+    paddingBottom: 16,
   },
   card: {
     width: 220,
@@ -202,7 +211,7 @@ const styles = StyleSheet.create({
     elevation: 3,
     borderColor: '#ccc',
     borderWidth: 0.5,
-    position: 'relative'
+    position: 'relative',
   },
   completedIcon: {
     position: 'absolute',
@@ -210,25 +219,24 @@ const styles = StyleSheet.create({
     right: 12,
     backgroundColor: '#00cc00',
     borderRadius: 20,
-    padding: 2
+    padding: 2,
   },
   name: {
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 12,
-    fontFamily: "Medium"
+    fontFamily: "Medium",
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 12,
-    fontFamily: "Regular"
   },
   detailText: {
     marginLeft: 8,
     fontSize: 14,
     color: '#666',
-    fontFamily: "Regular"
+    fontFamily: "Regular",
   },
   button: {
     marginTop: 12,
@@ -236,7 +244,7 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: '#00C52E',
     borderRadius: 20,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   buttonText: {
     color: '#00C52E',
@@ -244,12 +252,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   disabledButton: {
-    opacity: 0.6
+    opacity: 0.6,
   },
-  cardContainer: {
-    flexDirection: 'row',
-    gap: 16,
-    paddingBottom: 16, // optional padding for spacing
+  emptyText: {
+    fontSize: 16,
+    color: '#999',
+    paddingVertical: 20,
+    fontFamily: 'Regular',
   },
-  
 });

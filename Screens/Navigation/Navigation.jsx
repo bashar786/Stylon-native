@@ -18,7 +18,7 @@ import HomeIcon from '../../assets/images/home.svg'
 import HomeOrange from '../../assets/images/orangehome.svg'
 import CalenderIcon from '../../assets/images/calendericon.svg'
 import CalenderOrange from '../../assets/images/Calender.svg'
-import StatsIcon from '../../assets/images/stats.svg'
+import StatsIcon from '../../assets/images/insightswhite.svg'
 import StatsOrange from '../../assets/images/orangestats.svg'
 import ProfileIcon from '../../assets/images/profileicon.svg'
 import ProfileOrange from '../../assets/images/orangeprofile.svg'
@@ -30,6 +30,8 @@ const CalendarScreen = () => <View style={styles.screen}><Calender /></View>;
 const ShareScreen = () => <View style={styles.screen}><Stats /></View>;
 const SpecialistsScreen = () => <View style={styles.screen}><Specialists /></View>;
 const ProfileScreen = () => <View style={styles.screen}><Profile /></View>;
+const Insights = () => <View style={styles.screen}><Stats /></View>;
+
 const TransactionsScreen = () => <View style={styles.screen}><Text>Transactions</Text></View>;
 // 定义一个名为CustomersScreen的函数组件
 const CustomersScreen = () => <View style={styles.screen}><Text>Customers</Text></View>;
@@ -127,15 +129,6 @@ function BottomTabs({ navigation }) {
         }}
       />
       <Tab.Screen
-        name="Stats"
-        component={Stats}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            focused ? <StatsOrange width={24} height={24} /> : <StatsIcon width={24} height={24} />
-          ),
-        }}
-      />
-      <Tab.Screen
         name="Profile"
         component={ProfileScreen}
         options={{
@@ -169,11 +162,17 @@ function CustomDrawerContent(props) {
         icon={() => <Ionicons name="settings-outline" size={22} color="#fff" />}
         onPress={() => props.navigation.navigate('Settings')}
       />
+       <DrawerItem
+  label="Insights"
+  labelStyle={styles.drawerLabel}
+  icon={() => <StatsIcon width={22} height={22} />}
+  onPress={() => props.navigation.navigate('Insights')}
+/>
       <DrawerItem
         label="Logout"
         labelStyle={styles.drawerLabel}
         icon={() => <MaterialIcons name="logout" size={22} color="#fff" />}
-        onPress={() => props.navigation.navigate('Logout')}
+        onPress={() => props.navigation.navigate('LoginNumberInputScreen')}
       />
     </DrawerContentScrollView>
   );
@@ -198,6 +197,8 @@ export default function MainAppNavigator() {
       <Drawer.Screen name="Reviews" component={ReviewsScreen} />
       <Drawer.Screen name="Views" component={ViewsScreen} />
       <Drawer.Screen name="Settings" component={SettingsScreen} />
+      <Drawer.Screen name="Insights" component={Insights} />
+
       <Drawer.Screen name="Logout" component={LogoutScreen} />
     </Drawer.Navigator>
     </>

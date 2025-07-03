@@ -9,7 +9,8 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Menu, Button, IconButton } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons';
-
+import { useNavigation } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 // Simulated dropdown options
 const dropdownOptions = ['Today', 'This Week', 'This Month'];
 
@@ -44,8 +45,8 @@ const statsByRange = {
 const StatisticsGrid = () => {
   const [selectedRange, setSelectedRange] = useState('Today');
   const [menuVisible, setMenuVisible] = useState(false);
-
-  const renderStatCard = ({ item }) => (
+  const navigation = useNavigation();
+    const renderStatCard = ({ item }) => (
     <TouchableOpacity style={styles.card}>
       <LinearGradient colors={['#FC550B', '#FFC055']} style={styles.circleBorder}>
         <View style={styles.innerCircle}>
@@ -59,6 +60,10 @@ const StatisticsGrid = () => {
   return (
     <View style={styles.container}>
       {/* Header with Dropdown and Title */}
+      <TouchableOpacity onPress={()=>navigation.goBack()} style={{ marginTop: 30, marginBottom: 30, }}>
+            <Ionicons name="arrow-back" size={30} color="#000" />
+          </TouchableOpacity>
+
       <View style={styles.header}>
         <Text style={styles.title}>Statistics</Text>
 

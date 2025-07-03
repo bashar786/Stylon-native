@@ -5,6 +5,8 @@ import { AntDesign } from '@expo/vector-icons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useNavigation } from 'expo-router';
 import { KeyboardAvoidingView, Platform } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { Linking } from 'react-native';
 
 const Index = () => {
   const navigation = useNavigation();
@@ -44,8 +46,12 @@ const Index = () => {
     keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}
   >
      <View style={{ flex: 1 }}>
+      
     <KeyboardAwareScrollView  contentContainerStyle={[styles.container, { flexGrow: 1 }]}
     >
+       <TouchableOpacity onPress={()=> navigation.goBack()} style={{ marginTop: 30 }}>
+            <Ionicons name="arrow-back" size={30} color="#FF402D" />
+          </TouchableOpacity>
       <Text style={styles.subtitle}>Hello, nice to meet you!</Text>
       <View style={styles.header}>
         <Text style={styles.title}>Add Salon Services</Text>
@@ -166,9 +172,12 @@ const Index = () => {
           <Text style={styles.nextText}>Next</Text>
         </TouchableOpacity>
 
-      <TouchableOpacity style={styles.contactBtn}>
-        <Text style={styles.contactText}>Contact Us</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+  style={styles.contactBtn}
+  onPress={() => Linking.openURL('https://wordpress-1394520-5503173.cloudwaysapps.com/contact-us/')}
+>
+  <Text style={styles.contactText}>Contact Us</Text>
+</TouchableOpacity>
       </View>
     </View>
 
@@ -190,7 +199,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontFamily: 'Regular',
     fontSize: 14,
-    marginTop: 74,
+    marginTop: 30,
     color: '#203052',
     marginBottom: 10,
   },

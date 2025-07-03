@@ -9,16 +9,22 @@ const AppointmentHistoryDetailsScreen = () => {
   const navigation = useNavigation();
   const { appointment } = route.params;
   console.log('Appointment:', appointment);
-  const totalDuration = appointment.services.reduce((sum, service) => {
-    // Extract number from "30 mins", "1 hr", etc.
+  const totalMinutes = appointment.services.reduce((sum, service) => {
+    let minutes = 0;
     if (service.time.includes('hr')) {
-      const hours = parseFloat(service.time);
-      return sum + hours * 60;
-    } else {
-      const minutes = parseFloat(service.time);
-      return sum + minutes;
+      const hrParts = service.time.split('hr');
+      const hours = parseFloat(hrParts[0].trim());
+      minutes += hours * 60;
+      if (hrParts[1]?.includes('mins')) {
+        minutes += parseFloat(hrParts[1].replace('mins', '').trim());
+      }
+    } else if (service.time.includes('mins')) {
+      minutes += parseFloat(service.time.replace('mins', '').trim());
     }
+    return sum + minutes;
   }, 0);
+  
+  const totalDurationInHours = (totalMinutes / 60).toFixed(1);
   
   const totalPrice = appointment.services.reduce((sum, service) => {
     const price = parseFloat(service.price.replace('$', ''));
@@ -38,15 +44,19 @@ const AppointmentHistoryDetailsScreen = () => {
       
       <ScrollView contentContainerStyle={styles.card}>
         {/* Customer Info */}
-        <View style={{ display: 'flex', alignItems: 'center', marginBottom: 20, flexDirection: 'row' }}>
-          <Image
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}>
+        <Image
             source={appointment.customer?.image ? { uri: appointment.customer.image } : require('../../../../../assets/images/default-img.png')}
             style={styles.customerImage}
           />
-          <View>
-          <Text style={styles.customerName}>{appointment.customerName}</Text>
-          <Text style={styles.customerGender}>{appointment.customer?.gender}</Text>
-          </View>
+         <View style={{ justifyContent: 'center', marginLeft: 10 }}>
+  <Text style={[styles.customerName, { marginBottom: 2 }]}>{appointment.customerName}</Text>
+  <Text style={[styles.customerGender, { marginBottom: 0 }]}>
+    {appointment.customer?.gender}
+  </Text>
+</View>
+
+
         </View>
 
         {/* Services List */}
@@ -83,7 +93,11 @@ const AppointmentHistoryDetailsScreen = () => {
     <Text style={styles.label}>Total Duration</Text>
     <View style={styles.row}>
       <MaterialCommunityIcons name="timer-sand-complete" size={24} color="black" />
-      <Text style={styles.value}>{totalDuration} min</Text>
+      <Text style={styles.value}>
+  {totalMinutes > 60
+    ? `${parseFloat(totalDurationInHours)} hr`
+    : `${totalMinutes} min`}
+</Text>
     </View>
   </View>
   <View style={styles.totalItem}>

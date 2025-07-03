@@ -5,6 +5,7 @@ import Pending from './components/PendingAppointments';
 import History from './components/AppointmentHistory';
 import CalenderImage from '../../../assets/images/calendaradd.svg';
 import { useNavigation } from 'expo-router';
+import CreateSVG from '../../../assets/images/create15.svg'; // <-- SVG Import
 
 const Colors = {
   primary: '#FE4E00',
@@ -34,10 +35,19 @@ const ActivityScreen = () => {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.container}>
-          <View style={styles.calendarWrapper}>
-            <TouchableOpacity onPress={()=> navigation.navigate('AppointmentHistory')}><Text> <CalenderImage /></Text></TouchableOpacity>
-           
-          </View>
+        <View style={styles.calendarWrapper}>
+      {/* Create Box */}
+      <TouchableOpacity style={styles.box} onPress={()=> navigation.navigate('AppointmentHistory')}>
+        <CreateSVG width={30} height={30} />
+        <Text style={styles.label}>Calender</Text>
+      </TouchableOpacity>
+
+      {/* Book Appointment Box */}
+      <TouchableOpacity style={styles.box}>
+        <CreateSVG width={30} height={30} />
+        <Text style={styles.label}>Book Appointment</Text>
+      </TouchableOpacity>
+    </View>
 
           <View style={styles.tabContainer}>
             {['Upcoming', 'Pending', 'History'].map((tab) => (
@@ -84,9 +94,33 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   calendarWrapper: {
-    justifyContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 0,
+    gap: 16,
+    width: 300,
+    alignSelf: 'center',
+  },
+  box: {
+    flex: 1,
+    backgroundColor: '#fff',
+    borderRadius: 6,
+    paddingHorizontal: 27,
+    paddingVertical: 11,
     alignItems: 'center',
-    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    width: 100,
+    alignContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  label: {
+    marginTop: 6,
+    fontSize: 14,
+    fontFamily: 'SemiBold',
+    color: '#203052',
+    textAlign: 'center'
   },
   tabContainer: {
     flexDirection: 'row',

@@ -1,0 +1,46 @@
+<svg width="24.099609" height="24.099609" viewBox="0 0 24.0996 24.0996" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<desc>
+			Created with Pixso.
+	</desc>
+	<defs/>
+	<g style="mix-blend-mode:normal">
+		<path id="Stroke 4" d="M19.44 11.26L19.44 4.46C19.44 3.75 18.87 3.17 18.16 3.17L3.38 3.17C2.68 3.17 2.11 3.75 2.11 4.46L2.11 19.33C2.11 20.04 2.68 20.62 3.38 20.62L9.69 20.62" stroke="#203052" stroke-opacity="1.000000" stroke-width="1.000000" stroke-linejoin="round"/>
+	</g>
+	<g style="mix-blend-mode:normal">
+		<path id="Stroke 6" d="M17.5 18.95L15.14 16.58L15.14 13.24" stroke="#203052" stroke-opacity="1.000000" stroke-width="1.000000" stroke-linejoin="round"/>
+	</g>
+	<g style="mix-blend-mode:normal">
+		<path id="Stroke 8" d="M15.14 23.43C11.36 23.43 8.3 20.36 8.3 16.59C8.3 12.81 11.36 9.74 15.14 9.74C18.92 9.74 21.98 12.81 21.98 16.59C21.98 20.36 18.92 23.43 15.14 23.43Z" stroke="#203052" stroke-opacity="1.000000" stroke-width="1.000000"/>
+	</g>
+	<mask id="mask1_13474" mask-type="alpha" maskUnits="userSpaceOnUse" x="0.000977" y="0.000977" width="24.098633" height="24.098633">
+		<g style="mix-blend-mode:normal">
+			<path id="Clip 11" d="M0 24.09L24.09 24.09L24.09 0L0 0L0 24.09Z" fill="#203052" fill-opacity="1.000000" fill-rule="nonzero"/>
+		</g>
+	</mask>
+	<g mask="url(#mask1_13474)">
+		<g style="mix-blend-mode:normal">
+			<path id="Fill 10" d="M3.85 6.64L6.07 6.64L6.07 5.19L3.85 5.19L3.85 6.64Z" fill="#203052" fill-opacity="1.000000" fill-rule="nonzero"/>
+		</g>
+		<g style="mix-blend-mode:normal">
+			<path id="Fill 12" d="M7.18 6.64L9.4 6.64L9.4 5.19L7.18 5.19L7.18 6.64Z" fill="#203052" fill-opacity="1.000000" fill-rule="nonzero"/>
+		</g>
+		<g style="mix-blend-mode:normal">
+			<path id="Fill 13" d="M10.51 6.64L12.73 6.64L12.73 5.19L10.51 5.19L10.51 6.64Z" fill="#203052" fill-opacity="1.000000" fill-rule="nonzero"/>
+		</g>
+		<g style="mix-blend-mode:normal">
+			<path id="Fill 14" d="M13.84 6.64L16.06 6.64L16.06 5.19L13.84 5.19L13.84 6.64Z" fill="#203052" fill-opacity="1.000000" fill-rule="nonzero"/>
+		</g>
+		<g style="mix-blend-mode:normal">
+			<path id="Fill 15" d="M3.85 9.21L6.07 9.21L6.07 7.76L3.85 7.76L3.85 9.21Z" fill="#203052" fill-opacity="1.000000" fill-rule="nonzero"/>
+		</g>
+		<g style="mix-blend-mode:normal">
+			<path id="Fill 16" d="M7.18 9.21L9.4 9.21L9.4 7.76L7.18 7.76L7.18 9.21Z" fill="#203052" fill-opacity="1.000000" fill-rule="nonzero"/>
+		</g>
+		<g style="mix-blend-mode:normal">
+			<path id="Fill 17" d="M3.85 11.77L6.07 11.77L6.07 10.32L3.85 10.32L3.85 11.77Z" fill="#203052" fill-opacity="1.000000" fill-rule="nonzero"/>
+		</g>
+		<g style="mix-blend-mode:normal">
+			<path id="Fill 18" d="M3.85 14.34L6.07 14.34L6.07 12.89L3.85 12.89L3.85 14.34Z" fill="#203052" fill-opacity="1.000000" fill-rule="nonzero"/>
+		</g>
+	</g>
+</svg>

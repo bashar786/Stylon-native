@@ -43,10 +43,10 @@ const AppointmentCard = ({
 
       <View style={styles.buttonsContainer}>
         <TouchableOpacity style={styles.completeButton} onPress={onComplete}>
-          <Text style={styles.completeText}>Completed</Text>
+          <Text style={styles.completeText}>Complete</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.cancelButton} onPress={onCancel}>
-          <Text style={styles.cancelText}>Book Again</Text>
+          <Text style={styles.cancelText}>Cancel</Text>
         </TouchableOpacity>
       </View>
     </View>

@@ -26,7 +26,7 @@ const AppointmentCard = ({
             <FontAwesome name="check" size={16} color="red" />
             <Text style={styles.serviceText}>{service.name}</Text>
             <MaterialCommunityIcons name="timer-sand" size={16} color="gray" />
-            <Text style={styles.timeText}>{service.duration}</Text>
+            <Text style={styles.timeText}>{service.time}</Text>
           </View>
         ))}
       </View>
@@ -46,7 +46,7 @@ const AppointmentCard = ({
           <Text style={styles.completeText}>APPROVE</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.cancelButton} onPress={onCancel}>
-          <Text style={styles.cancelText}>REJECT</Text>
+          <Text style={styles.cancelText}>Decline</Text>
         </TouchableOpacity>
       </View>
     </View>

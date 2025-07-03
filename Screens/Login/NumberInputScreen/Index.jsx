@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   View,
   Text,
-  Pressable,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -13,20 +12,32 @@ import {
 import HomeImg from '../../../assets/images/Home-Main.svg';
 import PhoneIcon from '../../../assets/images/number.svg';
 import { useNavigation } from '@react-navigation/native';
-import Check from '../../../assets/images/check.svg';
 import Checkbox from 'expo-checkbox';
 
 const Index = () => {
   const navigation = useNavigation();
-  const [isChecked, setChecked] = useState(false);
   const [phone, setPhone] = useState('');
+  const [isChecked, setChecked] = useState(false);
 
-  const handleLogin = () => {
-    if (phone.trim().length > 0 && isChecked) {
-      navigation.navigate('OtpNumberScreen');
+  // ✅ Auto-prepend "+" and remove unwanted characters
+  const handlePhoneChange = (value) => {
+    let cleaned = value.replace(/[^\d+]/g, '');
+    if (!cleaned.startsWith('+')) {
+      cleaned = '+' + cleaned.replace(/[^\d]/g, '');
     }
+    setPhone(cleaned);
   };
-  
+
+  // ✅ Phone number validation
+  const handleLogin = () => {
+    const phoneRegex = /^\+?\d{10,15}$/;
+    if (!phoneRegex.test(phone.trim())) {
+      alert('Please enter a valid phone number with country code.');
+      return;
+    }
+
+    navigation.navigate('OtpNumberScreen');
+  };
 
   return (
     <KeyboardAvoidingView
@@ -46,39 +57,26 @@ const Index = () => {
             <View style={styles.inputBox}>
               <PhoneIcon width={24} height={24} style={styles.icon} />
               <TextInput
-                keyboardType="numeric"
+                keyboardType="phone-pad"
                 style={styles.Input}
                 placeholder="Phone Number"
                 placeholderTextColor={'#000'}
                 value={phone}
-                onChangeText={setPhone}
+                onChangeText={handlePhoneChange}
                 returnKeyType="done"
                 onSubmitEditing={handleLogin}
+                maxLength={12}
               />
             </View>
           </View>
 
           <View style={styles.ButtonContainer}>
-            <View style={styles.CheckBoxContainer}>
-            <Checkbox
-        value={isChecked}
-        onValueChange={setChecked}
-        color={isChecked ? '#FE4E00' : undefined}
-        style={styles.checkbox}
-      />
-              <Text style={styles.agreementText}>
-                By creating an account, you agree to our{' '}
-                <Text style={{ fontFamily: 'Bold' }}>Terms of Service</Text> and{' '}
-                <Text style={{ fontFamily: 'Bold' }}>Privacy Policy</Text>
-              </Text>
-            </View>
-
             <TouchableOpacity
               style={[
                 styles.Button,
                 {
                   backgroundColor:
-                    phone.trim().length > 0 ? '#FF402D' : '#FF402D80', // Disabled color
+                    phone.trim().length > 0 ? '#FF402D' : '#FF402D80',
                 },
               ]}
               disabled={phone.trim().length === 0}
@@ -89,7 +87,10 @@ const Index = () => {
 
             <Text style={styles.Bottom}>
               Don't have an account{' '}
-              <Text onPress={()=> navigation.navigate('RegisterNumberInputScreen')} style={{ fontWeight: 'bold', color: '#FF402D' }}>
+              <Text
+                onPress={() => navigation.navigate('RegisterNumberInputScreen')}
+                style={{ fontWeight: 'bold', color: '#FF402D' }}
+              >
                 Register
               </Text>
             </Text>
@@ -194,5 +195,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'Medium',
   },
-  ButtonContainer: {},
+  ButtonContainer: {
+    marginTop: 75,
+  },
 });

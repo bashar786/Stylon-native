@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   View,
   Text,
-  Pressable,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -13,36 +12,58 @@ import {
 import HomeImg from '../../../assets/images/Home-Main.svg';
 import PhoneIcon from '../../../assets/images/number.svg';
 import { useNavigation } from '@react-navigation/native';
-import Check from '../../../assets/images/check1.svg';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import Checkbox from 'expo-checkbox';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   selectPhoneNumber,
   selectTermsAccepted,
 } from '../../../redux/reducer/ReducerExport';
-import {  setPhoneNumber,acceptTerms,} from '../../../redux/reducer/SaloonReducer'
+import {
+  setPhoneNumber,
+  acceptTerms,
+} from '../../../redux/reducer/SaloonReducer';
+import { Linking } from 'react-native';
 
 const Index = () => {
   const navigation = useNavigation();
   const [isChecked, setChecked] = useState(false);
   const [phone, setPhone] = useState('');
   const dispatch = useDispatch();
+
   const phoneNumber = useSelector(selectPhoneNumber);
   const registration = useSelector((state) => state.salon.registration);
+
   useEffect(() => {
     console.log('Registration state updated:', registration);
   }, [registration]);
-  
+
+  // ✅ Format the phone input to always start with '+' and remove other characters
+  const handlePhoneChange = (value) => {
+    let cleaned = value.replace(/[^\d+]/g, '');
+    if (!cleaned.startsWith('+')) {
+      cleaned = '+' + cleaned.replace(/[^\d]/g, '');
+    }
+    setPhone(cleaned);
+  };
+
+  // ✅ Phone number validation and dispatching to Redux
   const handleLogin = () => {
-  if (phone.trim().length > 0 && isChecked) {
+    const phoneRegex = /^\+?\d{10,15}$/;
+    if (!phoneRegex.test(phone.trim())) {
+      alert('Please enter a valid phone number with country code.');
+      return;
+    }
+
+    if (!isChecked) {
+      alert('Please accept the terms and conditions.');
+      return;
+    }
+
     dispatch(setPhoneNumber(phone));
-    dispatch(acceptTerms(isChecked))
-    console.log('dispatched setPhoneNumber:', phoneNumber);
+    dispatch(acceptTerms(isChecked));
+    console.log('dispatched setPhoneNumber:', phone);
     navigation.navigate('RegisterOtpNumberScreen');
-  }
-};
-  
+  };
 
   return (
     <KeyboardAvoidingView
@@ -62,32 +83,49 @@ const Index = () => {
             <View style={styles.inputBox}>
               <PhoneIcon width={24} height={24} style={styles.icon} />
               <TextInput
-                keyboardType="numeric"
+                keyboardType="phone-pad"
                 style={styles.Input}
                 placeholder="Phone Number"
                 placeholderTextColor={'#000'}
                 value={phone}
-                onChangeText={setPhone}
+                onChangeText={handlePhoneChange}
                 returnKeyType="done"
                 onSubmitEditing={handleLogin}
+                maxLength={12}
               />
             </View>
           </View>
 
           <View style={styles.ButtonContainer}>
             <View style={styles.CheckBoxContainer}>
-            <Checkbox
-        value={isChecked}
-        onValueChange={setChecked}
-        color={isChecked ? '#FE4E00' : undefined}
-        style={styles.checkbox}
-      />
+              <Checkbox
+                value={isChecked}
+                onValueChange={setChecked}
+                color={isChecked ? '#FE4E00' : undefined}
+                style={styles.checkbox}
+              />
 
-              <Text style={styles.agreementText}>
-                By creating an account, you agree to our{' '}
-                <Text style={{ fontFamily: 'Bold' }}>Terms of Service</Text> and{' '}
-                <Text style={{ fontFamily: 'Bold' }}>Privacy Policy</Text>
-              </Text>
+<Text style={styles.agreementText}>
+  By creating an account, you agree to our{' '}
+  <Text
+    style={styles.linkText}
+    onPress={() =>
+      Linking.openURL('https://wordpress-1394520-5503173.cloudwaysapps.com/')
+    }
+  >
+    Terms of Service
+  </Text>{' '}
+  and{' '}
+  <Text
+    style={styles.linkText}
+    onPress={() =>
+      Linking.openURL('https://wordpress-1394520-5503173.cloudwaysapps.com/')
+    }
+  >
+    Privacy Policy
+  </Text>
+</Text>
+
             </View>
 
             <TouchableOpacity
@@ -95,10 +133,10 @@ const Index = () => {
                 styles.Button,
                 {
                   backgroundColor:
-                    phone.trim().length > 0 ? '#FF402D' : '#FF402D80', // Disabled color
+                    phone.trim().length > 0 && isChecked ? '#FF402D' : '#FF402D80',
                 },
               ]}
-              disabled={phone.trim().length === 0}
+              disabled={phone.trim().length === 0 || !isChecked}
               onPress={handleLogin}
             >
               <Text style={styles.buttonText}>Register</Text>
@@ -106,7 +144,10 @@ const Index = () => {
 
             <Text style={styles.Bottom}>
               Don't have an account{' '}
-              <Text onPress={()=> navigation.navigate('LoginNumberInputScreen')} style={{ fontWeight: 'bold', color: '#FF402D' }}>
+              <Text
+                onPress={() => navigation.navigate('LoginNumberInputScreen')}
+                style={{ fontWeight: 'bold', color: '#FF402D' }}
+              >
                 Login
               </Text>
             </Text>
@@ -192,12 +233,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 10,
-  
   },
   iconWrapper: {
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   Button: {
     flexDirection: 'row',
@@ -214,4 +254,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Medium',
   },
   ButtonContainer: {},
+  linkText: {
+    fontFamily: 'Bold',
+    color: '#FF402D',
+  },
+  
 });

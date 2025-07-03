@@ -37,7 +37,7 @@ const dummyAppointments = [
     specialistImage: require("../../../../../assets/images/hassan.png"),
     orderNumber: "A002",
     services: [
-      { name: "Facial", time: "45 mins", price: "$40" },
+      { name: "Facial", time: "70 mins", price: "$40" },
       { name: "Massage", time: "1 hr", price: "$60" },
     ],
   },
@@ -51,7 +51,7 @@ const dummyAppointments = [
     specialistImage: require("../../../../../assets/images/raza.png"),
     orderNumber: "A003",
     services: [
-      { name: "Manicure", time: "25 mins", price: "$15" },
+      { name: "Manicure", time: "75 mins", price: "$15" },
     ],
   },
 ];

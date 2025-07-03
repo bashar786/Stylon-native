@@ -1,118 +1,148 @@
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import React, { useState, useEffect } from 'react';
-import AppointmentCard from '../../AppointmentHistory';
+import React from 'react';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { Avatar } from 'react-native-paper';
+import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
 
-const mockAppointments = [
-  {
-    id: '1',
-    userImage: 'https://randomuser.me/api/portraits/men/1.jpg',
-    userName: 'Raza Hassan',
-    services: [
-      { name: 'Hair Styling', duration: '30 min' },
-      { name: 'Hair Color', duration: '1 hour' },
-    ],
-    appointmentDate: '30-12-2023, 10AM',
-    barberName: 'Raza, Sr Barber'
-  },
-  {
-    id: '2',
-    userImage: 'https://randomuser.me/api/portraits/women/1.jpg',
-    userName: 'Sarah Khan',
-    services: [
-      { name: 'Manicure', duration: '45 min' },
-      
-    ],
-    appointmentDate: '31-12-2023, 2PM',
-    barberName: 'Ali, Jr Barber'
-  },
-  // Add more mock appointments if needed
-];
-const UpcomingAppointments = () => {
-  const [appointments, setAppointments] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchAppointments = async () => {
-      try {
-        // Simulating fetch
-        setAppointments(mockAppointments);
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
-      }
-    };
-
-    fetchAppointments();
-  }, []);
-
-  const handleApprove = (appointmentId) => {
-    setAppointments(prev => prev.filter(app => app.id !== appointmentId));
-    alert(`Appointment ${appointmentId} marked as approved`);
-  };
-
-  const handleReject = (appointmentId) => {
-    setAppointments(prev => prev.filter(app => app.id !== appointmentId));
-    alert(`Appointment ${appointmentId} rejected`);
-  };
-
-  if (loading) {
-    return (
-      <View style={styles.container}>
-        <Text>Loading appointments...</Text>
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.error}>Error: {error}</Text>
-      </View>
-    );
-  }
-
+// Sample props
+const AppointmentCard = ({
+  userImage,
+  userName,
+  services,
+  appointmentDate,
+  barberName,
+  onComplete,
+  onCancel,
+}) => {
   return (
-    <View style={styles.container}>
-      
-      {appointments.length > 0 ? (
-        
-        appointments.map((item) => (
-          
-          <AppointmentCard
-            key={item.id}
-            userImage={item.userImage}
-            userName={item.userName}
-            services={item.services}
-            appointmentDate={item.appointmentDate}
-            barberName={item.barberName}
-            onComplete={() => handleApprove(item.id)}
-            onCancel={() => handleReject(item.id)}
-          />
-        ))
-      ) : (
-        <Text style={styles.emptyText}>No upcoming appointments</Text>
-      )}
+    <View style={styles.card}>
+      <View style={styles.header}>
+        <Avatar.Image size={50} source={{ uri: userImage }} />
+        <Text style={styles.userName}>{userName}</Text>
+      </View>
+
+      <View style={styles.servicesContainer}>
+        {services.map((service, index) => (
+          <View key={index} style={styles.serviceRow}>
+            <FontAwesome name="check" size={16} color="red" />
+            <Text style={styles.serviceText}>{service.name}</Text>
+            <MaterialCommunityIcons name="timer-sand" size={16} color="gray" />
+            <Text style={styles.timeText}>{service.time}</Text>
+          </View>
+        ))}
+      </View>
+
+      <View style={styles.infoRow}>
+        <MaterialCommunityIcons name="clock-outline" size={20} />
+        <Text style={styles.infoText}>{appointmentDate}</Text>
+      </View>
+
+      <View style={styles.infoRow}>
+        <MaterialCommunityIcons name="account" size={20} />
+        <Text style={styles.infoText}>{barberName}</Text>
+      </View>
+
+      <View style={styles.buttonsContainer}>
+        <TouchableOpacity style={styles.completeButton} onPress={onComplete}>
+          <Text style={styles.completeText}>Book Again</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
-export default UpcomingAppointments;
+export default AppointmentCard;
 
 const styles = StyleSheet.create({
-  container: {
-   
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#D8D8D8',
+    width: '100%',
+    marginBottom: 20,
+    paddingVertical: 32,
+    paddingHorizontal: 20,
   },
-  emptyText: {
-    textAlign: 'center',
-    marginTop: 20,
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  userName: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    fontFamily: 'Bold',
+  },
+  servicesContainer: {
+    marginTop: 12,
+  },
+  serviceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 12,
+    fontFamily: 'Regular',
+  },
+  serviceText: {
+    flex: 1,
     fontSize: 16,
-    color: '#666',
+    fontFamily: 'Regular',
   },
-  error: {
-    color: 'red',
+  timeText: {
+    color: 'gray',
+    fontSize: 14,
+    fontFamily: 'Regular',
+  },
+  infoRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 12,
+    gap: 8,
+    
+    
+  },
+  infoText: {
+    fontSize: 16,
+    fontFamily: 'Regular',
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: '#D8D8D8',
+    paddingTop: 32,
+  },
+  completeButton: {
+    borderWidth: 1,
+    borderColor: 'green',
+    borderRadius: 30,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    width: '100%',
     textAlign: 'center',
-    marginTop: 20,
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
+  cancelButton: {
+    borderWidth: 1,
+    borderColor: 'red',
+    borderRadius: 30,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    width: '48%',
+    textAlign: 'center'
+  },
+  completeText: {
+    color: '#00C52E',
+    fontFamily: 'SemiBold',
+    textAlign: 'center',
+    fontSize: 16,
+  },
+  cancelText: {
+    color: '#FF240E',
+    fontFamily: 'SemiBold',
+    textAlign: 'center',
+    fontSize: 16,
   },
 });

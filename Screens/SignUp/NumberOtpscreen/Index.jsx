@@ -9,10 +9,11 @@ import {
   Text,
   TouchableOpacity,
   Pressable,
+  Alert,
+  Keyboard,
 } from 'react-native';
 import OTPImg from '../../../assets/images/Confirmed.svg';
 import { Ionicons } from '@expo/vector-icons';
-import { Keyboard } from 'react-native'; // Add this at the top
 import { useNavigation } from '@react-navigation/native';
 
 const OTPInput = () => {
@@ -20,29 +21,56 @@ const OTPInput = () => {
   const [otp, setOtp] = useState(['', '', '', '', '']);
   const inputs = useRef([]);
 
+  const [seconds, setSeconds] = useState(10);
+  const [canResend, setCanResend] = useState(false);
+
   useEffect(() => {
-    // Auto-focus the first input on mount
     if (inputs.current[0]) {
       inputs.current[0].focus();
     }
   }, []);
 
+  // Auto-submit when OTP is complete
+  useEffect(() => {
+    if (otp.every((digit) => digit !== '')) {
+      handleSubmit();
+    }
+  }, [otp]);
+
+  useEffect(() => {
+    let timer;
+    if (seconds > 0) {
+      timer = setTimeout(() => setSeconds(seconds - 1), 1000);
+    } else {
+      setCanResend(true);
+    }
+    return () => clearTimeout(timer);
+  }, [seconds]);
+
   const handleChange = (text, index) => {
-    if (text.length > 1) return;
     const newOtp = [...otp];
+
+    // Paste support: if user pastes entire OTP
+    if (text.length > 1) {
+      const pasted = text.split('').slice(0, 5);
+      for (let i = 0; i < pasted.length; i++) {
+        newOtp[i] = pasted[i];
+      }
+      setOtp(newOtp);
+      inputs.current[Math.min(pasted.length - 1, 4)]?.focus();
+      return;
+    }
+
     newOtp[index] = text;
     setOtp(newOtp);
-  
-    if (text) {
-      if (index < 4) {
-        inputs.current[index + 1].focus();
-      } else {
-        Keyboard.dismiss();
-      }
+
+    if (text && index < 4) {
+      inputs.current[index + 1]?.focus();
+    } else if (index === 4) {
+      Keyboard.dismiss();
     }
   };
-  
-  
+
   const handleKeyPress = ({ nativeEvent }, index) => {
     if (nativeEvent.key === 'Backspace') {
       const newOtp = [...otp];
@@ -50,7 +78,7 @@ const OTPInput = () => {
         if (index > 0) {
           newOtp[index - 1] = '';
           setOtp(newOtp);
-          inputs.current[index - 1].focus();
+          inputs.current[index - 1]?.focus();
         }
       } else {
         newOtp[index] = '';
@@ -59,46 +87,31 @@ const OTPInput = () => {
     }
   };
 
-  const isOtpComplete = otp.every((digit) => digit !== '');
-
   const handleSubmit = () => {
     const enteredOtp = otp.join('');
-    if (isOtpComplete) {
+    if (otp.every((digit) => digit !== '')) {
       console.log('Entered OTP:', enteredOtp);
-      try {
-        navigation.navigate('SaloonInfoScreen');
-        console.log('Navigation triggered');
-      } catch (e) {
-        console.log('Navigation error:', e);
-      }
-    } else {
-      console.log('Please enter all 5 digits of the OTP.');
+      navigation.navigate('SaloonInfoScreen');
     }
   };
-  
-  
-
-  const [seconds, setSeconds] = useState(10);
-  const [canResend, setCanResend] = useState(false);
-
-  useEffect(() => {
-    let timer;
-
-    if (seconds > 0) {
-      timer = setTimeout(() => setSeconds(seconds - 1), 1000);
-    } else {
-      setCanResend(true);
-    }
-
-    return () => clearTimeout(timer);
-  }, [seconds]);
 
   const handleResend = () => {
     if (canResend) {
-      setSeconds(10); // reset timer
+      setSeconds(10);
       setCanResend(false);
-      // TODO: call resend OTP API here
+      // TODO: Trigger resend OTP API
     }
+  };
+
+  const confirmGoBack = () => {
+    Alert.alert(
+      'Are you sure?',
+      'This will cancel your verification process.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Yes', onPress: () => navigation.goBack() },
+      ]
+    );
   };
 
   return (
@@ -112,32 +125,42 @@ const OTPInput = () => {
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.container}>
+          {/* Back Button */}
+          <TouchableOpacity onPress={confirmGoBack} style={{ marginTop: 30 }}>
+            <Ionicons name="arrow-back" size={30} color="#FF402D" />
+          </TouchableOpacity>
+
           <OTPImg style={styles.HomeImg} height={275} />
           <Text style={styles.GreyText}>Phone verification</Text>
           <Text style={styles.heading}>Enter your OTP code</Text>
+
           <View style={styles.InputContainer}>
             {otp.map((digit, index) => (
-             <TextInput
-             key={index}
-             style={[
-               styles.input,
-               digit !== '' && styles.inputWithValue,
-             ]}
-             keyboardType="number-pad"
-             maxLength={1}
-             value={digit}
-             onChangeText={(text) => handleChange(text, index)}
-             onKeyPress={(e) => handleKeyPress(e, index)}
-             ref={(ref) => (inputs.current[index] = ref)}
-             returnKeyType="done"
-             blurOnSubmit={false}
-             onSubmitEditing={() => {
-               if (index === 4) Keyboard.dismiss();
-             }}
-           />
-           
+              <TextInput
+                key={index}
+                style={[
+                  styles.input,
+                  digit !== '' && styles.inputWithValue,
+                ]}
+                keyboardType="number-pad"
+                maxLength={1}
+                value={digit}
+                onChangeText={(text) => handleChange(text, index)}
+                onKeyPress={(e) => handleKeyPress(e, index)}
+                ref={(ref) => (inputs.current[index] = ref)}
+                returnKeyType="done"
+                blurOnSubmit={false}
+                onFocus={() => {
+                  const newOtp = [...otp];
+                  newOtp[index] = '';
+                  setOtp(newOtp);
+                }}
+                textContentType="oneTimeCode"
+                autoComplete="sms-otp"
+              />
             ))}
           </View>
+
           <View style={styles.ResendContainer}>
             <TouchableOpacity onPress={handleResend} disabled={!canResend}>
               <Text style={styles.resendText}>
@@ -150,18 +173,21 @@ const OTPInput = () => {
             </TouchableOpacity>
 
             <Pressable>
-  <TouchableOpacity
-    style={[
-      styles.NextButton,
-      { backgroundColor: isOtpComplete ? '#FF402D' : '#FF402D80' },
-    ]}
-    disabled={!isOtpComplete}
-    onPress={handleSubmit}
-  >
-    <Ionicons name="arrow-forward" size={20} color="white" />
-  </TouchableOpacity>
-</Pressable>
-
+              <TouchableOpacity
+                style={[
+                  styles.NextButton,
+                  {
+                    backgroundColor: otp.every((digit) => digit !== '')
+                      ? '#FF402D'
+                      : '#FF402D80',
+                  },
+                ]}
+                disabled={!otp.every((digit) => digit !== '')}
+                onPress={handleSubmit}
+              >
+                <Ionicons name="arrow-forward" size={20} color="white" />
+              </TouchableOpacity>
+            </Pressable>
           </View>
         </View>
       </ScrollView>
